@@ -1,0 +1,97 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# PIB per cápita (US$ a precios actuales) de los paises de sur y centro America.
+#
+# From: https://datos.bancomundial.org/indicador/NY.GDP.PCAP.CD?locations=AR
+# --------------------------------------------------------------------------------------- #
+
+library(tidyr)
+library(miscset)
+library(ggplot2)
+library(corrplot) 
+library(GGally)
+library(readr)  
+library(dplyr)  
+library(crayon) 
+library(modeest)
+library(readxl)
+library(plotly)
+library(ggthemes)
+library(reshape)
+
+```
+
+
+
+
+
+```{r}
+
+# --------------------------------------------------------------------------------------- #
+
+#Ruta de ubicacion del archivo
+
+setwd("C:/Users/54116/Desktop/Carpetas/Trabajos en R/Banco Mundial")
+
+dir()
+
+
+# --------------------------------------------------------------------------------------- #
+
+
+# Data Set con valores del pib per capita
+
+gdp = read_excel("GDP1.xls") 
+
+# Se crea la Variable año
+
+gdpc = gdp$Año  
+
+# Data Set con valores logaritmicos
+
+gdp =  log(gdp[,2:19])
+
+# Le agrego el año al Data Set logaritmico
+
+gdp$Año = gdpc
+
+
+# --------------------------------------------------------------------------------------- #
+
+# Grafico Plotly de Series de Tiempo 
+
+grafico = plot_ly(x = ~gdp$Año) 
+grafico = grafico %>% add_lines(y = ~gdp$Argentina, name = "Argentina", line = list(shape = "spline")) 
+grafico = grafico %>% add_lines(y = gdp$Bolivia, name = "Bolivia", line = list(shape = "spline")) 
+grafico = grafico %>% add_lines(y = gdp$Brasil , name = "Brasil", line = list(shape = "spline")) 
+grafico = grafico %>% add_lines(y = gdp$Chile , name = "Chile", line = list(shape = "spline")) 
+grafico = grafico %>% add_lines(y = gdp$Colombia , name = "Colombia", line = list(shape = "spline")) 
+grafico = grafico %>% add_lines(y = gdp$`Costa Rica` , name = "Costa Rica`", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Dominican , name = "Dominican", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Ecuador , name = "Ecuador", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Guatemala , name = "Guatemala", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Honduras , name = "Honduras", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$México , name = "México", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Nicaragua , name = "Nicaragua", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Panamá , name = "Panamá", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Perú , name = "Perú", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Paraguay , name = "Paraguay", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Uruguay , name = "Uruguay", line = list(shape = "spline"))
+grafico = grafico %>% add_lines(y = gdp$Venezuela , name = "Venezuela", line = list(shape = "spline"))
+grafico = grafico %>% layout(title = "Pib Per capita en Log", xaxis = list(title = 'Año'), yaxis = list (title = 'Pib Per Capita'))
+grafico
+
+
+
+
+
+
+```
+
